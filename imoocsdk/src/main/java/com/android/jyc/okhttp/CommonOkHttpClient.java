@@ -1,6 +1,7 @@
 package com.android.jyc.okhttp;
 
 import com.android.jyc.okhttp.https.HttpsUtils;
+import com.android.jyc.okhttp.response.CommonJsonCallback;
 
 import java.util.concurrent.TimeUnit;
 
@@ -56,7 +57,7 @@ public class CommonOkHttpClient {
      * @param commCallBack
      * @return Call
      */
-    public static Call sendRequest(Request request, Callback commCallBack){
+    public static Call sendRequest(Request request, CommonJsonCallback commCallBack){
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(commCallBack);
 

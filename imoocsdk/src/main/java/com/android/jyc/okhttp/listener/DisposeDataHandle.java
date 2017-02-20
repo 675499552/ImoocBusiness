@@ -10,6 +10,7 @@ public class DisposeDataHandle {
     public Class<?> mClass = null;
 
     public DisposeDataHandle(DisposeDataListener dataListener) {
+        this.mListener = dataListener;
     }
 
     public DisposeDataHandle(DisposeDataListener dataListener, Class<?> clazz) {
