@@ -1,6 +1,7 @@
 package com.android.jyc.okhttp;
 
 import com.android.jyc.okhttp.https.HttpsUtils;
+import com.android.jyc.okhttp.listener.DisposeDataHandle;
 import com.android.jyc.okhttp.response.CommonJsonCallback;
 
 import java.util.concurrent.TimeUnit;
@@ -61,6 +62,23 @@ public class CommonOkHttpClient {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(commCallBack);
 
+        return call;
+    }
+
+    /**
+     * 通过构造好的Request,Callback去发送请求
+     *
+     * @param request
+     */
+    public static Call get(Request request, DisposeDataHandle handle) {
+        Call call = mOkHttpClient.newCall(request);
+        call.enqueue(new CommonJsonCallback(handle));
+        return call;
+    }
+
+    public static Call post(Request request, DisposeDataHandle handle) {
+        Call call = mOkHttpClient.newCall(request);
+        call.enqueue(new CommonJsonCallback(handle));
         return call;
     }
 }

@@ -1,5 +1,13 @@
 <resources>
 
+    <color name="white">#ffffff</color>
     <color name="color_333333">#333333</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_fed952">#fed952</color>
+    <color name="color_cdcdcd">#cdcdcd</color>
+    <color name="color_ff33b5e5">#ff33b5e5</color>
+    <color name="color_cc0000">#cc0000</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_c0c4ce">#c0c4ce</color>
 
 </resources>
