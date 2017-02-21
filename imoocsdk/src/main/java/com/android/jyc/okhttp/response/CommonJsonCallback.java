@@ -66,6 +66,18 @@ public class CommonJsonCallback implements Callback {
      */
     @Override
     public void onResponse(Call call, Response response) throws IOException {
+//        if (response.code() ==200){
+//            final String result = response.body().string();
+//            mDeliverHandler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    handleResponse(result);
+//                }
+//            });
+//        }else{
+//            onFailure(call,null);
+//        }
+
         final String result = response.body().string();
         mDeliverHandler.post(new Runnable() {
             @Override
@@ -73,6 +85,7 @@ public class CommonJsonCallback implements Callback {
                 handleResponse(result);
             }
         });
+
     }
 
     /**
@@ -88,54 +101,54 @@ public class CommonJsonCallback implements Callback {
         }
 
 //   需要根据服务器返回码决定是否成功返回
-//        try {
-//            JSONObject reult = new JSONObject(responseObj.toString());
-//
-//            //开始尝试解析json
-//            if (reult.has(RESULT_CODE)){
-//                //从json对象中取出我们的响应吗,若为0，则是正确响应
-//                if (reult.getInt(RESULT_CODE) == RESULT_CODE_VALUE) {
-//                    if (mClass == null) {
-//                        mListener.onSuccess(responseObj);
-//                    } else {
-//                        //需要将json对象转化为实体对象
-//                        Object obj = JSON.parseObject(responseObj.toString(), mClass);
-//                        //表明正确的转化了实体对象
-//                        if (obj != null) {
-//                            mListener.onSuccess(obj);
-//                        } else {
-//                            //返回的不是合法的json
-//                            mListener.onFailure(new OKHttpException(JSON_ERROR, EMPTY_MSG));
-//                        }
-//                    }
-//                }else{
-//                    //讲服务器返回给我们的异常回调到应用处去处理
-//                    mListener.onFailure(new OKHttpException(OTHER_ERROR,reult.get(RESULT_CODE)));
-//                }
-//            }
-//        } catch (JSONException e) {
-//            mListener.onFailure(new OKHttpException(OTHER_ERROR,e.getMessage()));
-//        }
-
-
         try {
-            //从json对象中取出我们的响应吗,若为0，则是正确响应
-            if (mClass == null) {
-                mListener.onSuccess(responseObj);
-            } else {
-                //需要将json对象转化为实体对象
-                Object obj = JSON.parseObject(responseObj.toString(), mClass);
-                //表明正确的转化了实体对象
-                if (obj !=null){
-                    mListener.onSuccess(obj);
-                }else {
-                    //返回的不是合法的json
-                    mListener.onFailure(new OKHttpException(JSON_ERROR,EMPTY_MSG));
+            JSONObject reult = new JSONObject(responseObj.toString());
+
+            //开始尝试解析json
+            if (reult.has(RESULT_CODE)){
+                //从json对象中取出我们的响应吗,若为0，则是正确响应
+                if (reult.getInt(RESULT_CODE) == RESULT_CODE_VALUE) {
+                    if (mClass == null) {
+                        mListener.onSuccess(responseObj);
+                    } else {
+                        //需要将json对象转化为实体对象
+                        Object obj = JSON.parseObject(responseObj.toString(), mClass);
+                        //表明正确的转化了实体对象
+                        if (obj != null) {
+                            mListener.onSuccess(obj);
+                        } else {
+                            //返回的不是合法的json
+                            mListener.onFailure(new OKHttpException(JSON_ERROR, EMPTY_MSG));
+                        }
+                    }
+                }else{
+                    //讲服务器返回给我们的异常回调到应用处去处理
+                    mListener.onFailure(new OKHttpException(OTHER_ERROR,reult.get(RESULT_CODE)));
                 }
             }
-        } catch (Exception e) {
+        } catch (JSONException e) {
             mListener.onFailure(new OKHttpException(OTHER_ERROR,e.getMessage()));
         }
+
+
+//        try {
+//            //从json对象中取出我们的响应吗,若为0，则是正确响应
+//            if (mClass == null) {
+//                mListener.onSuccess(responseObj);
+//            } else {
+//                //需要将json对象转化为实体对象
+//                Object obj = JSON.parseObject(responseObj.toString(), mClass);
+//                //表明正确的转化了实体对象
+//                if (obj !=null){
+//                    mListener.onSuccess(obj);
+//                }else {
+//                    //返回的不是合法的json
+//                    mListener.onFailure(new OKHttpException(JSON_ERROR,EMPTY_MSG));
+//                }
+//            }
+//        } catch (Exception e) {
+//            mListener.onFailure(new OKHttpException(OTHER_ERROR,e.getMessage()));
+//        }
     }
 
 

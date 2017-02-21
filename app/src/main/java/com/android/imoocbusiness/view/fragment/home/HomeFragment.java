@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.imoocbusiness.R;
+import com.android.imoocbusiness.module.recommand.BaseRecommandModel;
 import com.android.imoocbusiness.network.RequestCenter;
 import com.android.imoocbusiness.view.fragment.BaseFragment;
 import com.android.jyc.okhttp.CommonOkHttpClient;
@@ -38,7 +39,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
      * data
      */
 //    private CoourseAdapter mAdapter;
-//    private BaseRecommandModel mRecommandData;
+    private BaseRecommandModel mRecommandData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

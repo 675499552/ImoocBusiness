@@ -1,5 +1,6 @@
 package com.android.imoocbusiness.network;
 
+import com.android.imoocbusiness.module.recommand.BaseRecommandModel;
 import com.android.jyc.okhttp.CommonOkHttpClient;
 import com.android.jyc.okhttp.listener.DisposeDataHandle;
 import com.android.jyc.okhttp.listener.DisposeDataListener;
@@ -25,6 +26,6 @@ public class RequestCenter {
      * @param listener
      */
     public static void requestRecommandData(DisposeDataListener listener){
-        RequestCenter.postRequest(HttpConstants.HOME_RECOMMAND,null,listener,null);
+        RequestCenter.postRequest(HttpConstants.HOME_RECOMMAND,null,listener, BaseRecommandModel.class);
     }
 }
