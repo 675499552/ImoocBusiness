@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.imoocbusiness.R;
+import com.android.imoocbusiness.adapter.CourseAdapter;
 import com.android.imoocbusiness.module.recommand.BaseRecommandModel;
 import com.android.imoocbusiness.network.RequestCenter;
 import com.android.imoocbusiness.view.fragment.BaseFragment;
@@ -38,7 +39,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
     /**
      * data
      */
-//    private CoourseAdapter mAdapter;
+    private CourseAdapter mAdapter;
     private BaseRecommandModel mRecommandData;
 
     @Override
@@ -76,8 +77,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
         RequestCenter.requestRecommandData(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
-                //完成真正的功能逻辑
                 Log.e("ceshi","onSuccess:"+responseObj.toString());
+
+                /**
+                 * 获取到数据后更新UI
+                 */
+                mRecommandData = (BaseRecommandModel) responseObj;
+                showSuccessView();
             }
 
             @Override
@@ -86,6 +92,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
                 Log.e("ceshi","onFailure:"+reasonObj.toString());
             }
         });
+    }
+
+    /**
+     * 请求成功执行的方法
+     */
+    private void showSuccessView() {
+        //判断数据是否为空
+        if (mRecommandData.data.list !=null&& mRecommandData.data.list.size()>0){
+            mLoadingView.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+            mAdapter = new CourseAdapter(mContext,mRecommandData.data.list);
+            mListView.setAdapter(mAdapter);
+        }else{
+            showErrorView();
+        }
+    }
+
+    /**
+     *请求失败后执行的方法
+     */
+    private void showErrorView() {
+
     }
 
     @Override
