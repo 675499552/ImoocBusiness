@@ -17,6 +17,7 @@ import com.android.imoocbusiness.adapter.CourseAdapter;
 import com.android.imoocbusiness.module.recommand.BaseRecommandModel;
 import com.android.imoocbusiness.network.RequestCenter;
 import com.android.imoocbusiness.view.fragment.BaseFragment;
+import com.android.imoocbusiness.view.home.HomeHeaderLayout;
 import com.android.jyc.okhttp.CommonOkHttpClient;
 import com.android.jyc.okhttp.listener.DisposeDataListener;
 import com.android.jyc.okhttp.request.CommonRequest;
@@ -103,6 +104,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
             mLoadingView.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
             mAdapter = new CourseAdapter(mContext,mRecommandData.data.list);
+            mListView.setAdapter(mAdapter);
+
+            //为listview添加列表头
+            mListView.addHeaderView(new HomeHeaderLayout(mContext, mRecommandData.data.head));
+            mAdapter = new CourseAdapter(mContext, mRecommandData.data.list);
             mListView.setAdapter(mAdapter);
         }else{
             showErrorView();

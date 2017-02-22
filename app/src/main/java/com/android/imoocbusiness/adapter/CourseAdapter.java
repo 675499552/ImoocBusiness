@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.android.imoocbusiness.R;
 import com.android.imoocbusiness.module.recommand.RecommandBodyValue;
+import com.android.imoocbusiness.util.Util;
+import com.android.jyc.adutil.Utils;
 import com.android.jyc.imageloader.ImageLoaderManager;
 
 import java.util.ArrayList;
@@ -96,17 +98,17 @@ public class CourseAdapter extends BaseAdapter {
         if (convertView == null) {
             switch (type) {
                 case VIDOE_TYPE:
-                //显示video卡片
-                mViewHolder = new ViewHolder();
-                convertView = mInflate.inflate(R.layout.item_video_layout, parent, false);
-                mViewHolder.mVieoContentLayout = (RelativeLayout)
-                        convertView.findViewById(R.id.video_ad_layout);
-                mViewHolder.mLogoView = (CircleImageView) convertView.findViewById(R.id.item_logo_view);
-                mViewHolder.mTitleView = (TextView) convertView.findViewById(R.id.item_title_view);
-                mViewHolder.mInfoView = (TextView) convertView.findViewById(R.id.item_info_view);
-                mViewHolder.mFooterView = (TextView) convertView.findViewById(R.id.item_footer_view);
-                mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
-                //为对应布局创建播放器
+                    //显示video卡片
+                    mViewHolder = new ViewHolder();
+                    convertView = mInflate.inflate(R.layout.item_video_layout, parent, false);
+                    mViewHolder.mVieoContentLayout = (RelativeLayout)
+                            convertView.findViewById(R.id.video_ad_layout);
+                    mViewHolder.mLogoView = (CircleImageView) convertView.findViewById(R.id.item_logo_view);
+                    mViewHolder.mTitleView = (TextView) convertView.findViewById(R.id.item_title_view);
+                    mViewHolder.mInfoView = (TextView) convertView.findViewById(R.id.item_info_view);
+                    mViewHolder.mFooterView = (TextView) convertView.findViewById(R.id.item_footer_view);
+                    mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
+                    //为对应布局创建播放器
 //                mAdsdkContext = new VideoAdContext(mViewHolder.mVieoContentLayout,
 //                        new Gson().toJson(value), null);
 //                mAdsdkContext.setAdResultListener(new AdContextInterface() {
@@ -125,7 +127,7 @@ public class CourseAdapter extends BaseAdapter {
 //                        mContext.startActivity(intent);
 //                    }
 //                });
-                break;
+                    break;
                 case CARD_TYPE_ONE:
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_product_card_one_layout, parent, false);
@@ -154,11 +156,14 @@ public class CourseAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_product_card_three_layout, null, false);
                     mViewHolder.mViewPager = (ViewPager) convertView.findViewById(R.id.pager);
-                    //add data
-//                    ArrayList<RecommandBodyValue> recommandList = Util.handleData(value);
-//                    mViewHolder.mViewPager.setPageMargin(Utils.dip2px(mContext, 12));
-//                    mViewHolder.mViewPager.setAdapter(new HotSalePagerAdapter(mContext, recommandList));
-//                    mViewHolder.mViewPager.setCurrentItem(recommandList.size() * 100);
+
+                    mViewHolder.mViewPager.setPageMargin(Utils.dip2px(mContext,12));
+                    //为ViewPage填充数据
+                    ArrayList<RecommandBodyValue> recommandBodyValues = Util.handleData(value);
+                    mViewHolder.mViewPager.setAdapter(new HotSalePagerAdapter(mContext,recommandBodyValues));
+                    //一开始就让ViewPager处于中间的位置  这样就可以左右滑动了
+
+                    mViewHolder.mViewPager.setCurrentItem(recommandBodyValues.size()*100);
                     break;
             }
             convertView.setTag(mViewHolder);
@@ -169,7 +174,27 @@ public class CourseAdapter extends BaseAdapter {
         }
 
         //开始绑定数据
-        switch (type){
+        switch (type) {
+            case CARD_TYPE_ONE:
+                //多图Iiem绑定数据
+                mViewHolder.mTitleView.setText(value.title);
+                mViewHolder.mInfoView.setText(value.info.concat(mContext.getString(R.string.tian_qian)));
+                mViewHolder.mFooterView.setText(value.text);
+                mViewHolder.mPriceView.setText(value.price);
+                mViewHolder.mFromView.setText(value.from);
+                mViewHolder.mZanView.setText(mContext.getString(R.string.dian_zan).concat(value.zan));
+
+                /**
+                 * logoView加载异步图片
+                 */
+                mImagerLoader.displayImage(mViewHolder.mLogoView, value.logo);
+                //动态的添加ImageView到水平ScrollView中
+                mViewHolder.mProductLayout.removeAllViews();//删除已有的图片
+                for (String url : value.url) {
+                    mViewHolder.mProductLayout.addView(createImageView(url));
+                }
+
+                break;
             case CARD_TYPE_TWO:
                 mViewHolder.mTitleView.setText(value.title);
                 mViewHolder.mInfoView.setText(value.info.concat(mContext.getString(R.string.tian_qian)));
@@ -185,6 +210,23 @@ public class CourseAdapter extends BaseAdapter {
                 break;
         }
         return convertView;
+    }
+
+    /**
+     * 动态的创建ImageView
+     *
+     * @return
+     */
+    private ImageView createImageView(String url) {
+
+        ImageView imageView = new ImageView(mContext);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                Utils.dip2px(mContext, 100), LinearLayout.LayoutParams.MATCH_PARENT
+        );
+        params.leftMargin = Utils.dip2px(mContext, 5);
+        imageView.setLayoutParams(params);
+        mImagerLoader.displayImage(imageView, url);
+        return imageView;
     }
 
     /**
