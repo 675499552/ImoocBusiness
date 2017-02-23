@@ -1,5 +1,7 @@
 package com.android.imoocbusiness.view.fragment.home;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import com.android.imoocbusiness.module.recommand.BaseRecommandModel;
 import com.android.imoocbusiness.network.RequestCenter;
 import com.android.imoocbusiness.view.fragment.BaseFragment;
 import com.android.imoocbusiness.view.home.HomeHeaderLayout;
+import com.android.imoocbusiness.zxing.app.CaptureActivity;
 import com.android.jyc.okhttp.CommonOkHttpClient;
 import com.android.jyc.okhttp.listener.DisposeDataListener;
 import com.android.jyc.okhttp.request.CommonRequest;
@@ -27,7 +30,7 @@ import com.android.jyc.okhttp.request.CommonRequest;
  */
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener,AdapterView.OnItemClickListener{
-
+    private static final int REQUEST_QRCODE = 0x01;
     /**
      * UI
      */
@@ -36,6 +39,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
     private TextView mCategoryView;
     private TextView mSearchView;
     private ImageView mLoadingView;
+    private TextView mQRCodeView;
 
     /**
      * data
@@ -59,6 +63,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
     }
 
     private void initView() {
+        mQRCodeView = (TextView) mContentView.findViewById(R.id.qrcode_view);
+        mQRCodeView.setOnClickListener(this);
         mCategoryView = (TextView) mContentView.findViewById(R.id.category_view);
         mCategoryView.setOnClickListener(this);
         mSearchView = (TextView) mContentView.findViewById(R.id.search_view);
@@ -124,7 +130,37 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener,A
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.qrcode_view:
+                    doOpenCamera();
+                break;
+//            case R.id.category_view:
+//                与我交谈
+//                Intent intent2 = new Intent(Intent.ACTION_VIEW, Util.createQQUrl("277451977"));
+//                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent2);
+//                break;
+//            case R.id.search_view:
+//                Intent searchIntent = new Intent(mContext, SearchActivity.class);
+//                mContext.startActivity(searchIntent);
+//                break;
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_QRCODE:
+                if (requestCode == Activity.RESULT_OK){
+                    String code = data.getStringExtra("SCAN_RESULT");
+                }
+                break;
+        }
+    }
+
+    public void doOpenCamera() {
+        Intent intent = new Intent(mContext, CaptureActivity.class);
+        startActivityForResult(intent, REQUEST_QRCODE);
     }
 
     @Override

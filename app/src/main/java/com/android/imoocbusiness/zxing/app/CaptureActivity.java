@@ -177,7 +177,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     SurfaceHolder surfaceHolder;
 
     /**
-     * 闪光灯点击事件
+     * 按钮点击事件
      */
     private OnClickListener click = new OnClickListener() {
 
@@ -521,6 +521,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             uri = data.getData();
+            //启动一个线程去完成图片扫描
             new Thread(new Runnable() {
                 @Override
                 public void run() {

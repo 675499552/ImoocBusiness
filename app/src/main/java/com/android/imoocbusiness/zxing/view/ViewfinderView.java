@@ -122,7 +122,7 @@ public final class ViewfinderView extends View {
             paint.setAlpha(OPAQUE);
             canvas.drawBitmap(resultBitmap, null, frame, paint);
         } else {
-
+            //绘制四角的矩形
             paint.setColor(Color.BLUE);
             canvas.drawRect(frame.left, frame.top, frame.left + ScreenRate,
                     frame.top + CORNER_WIDTH, paint);
@@ -141,19 +141,25 @@ public final class ViewfinderView extends View {
             canvas.drawRect(frame.right - CORNER_WIDTH, frame.bottom
                     - ScreenRate, frame.right, frame.bottom, paint);
 
+            //定义好扫描线每秒的速度
             slideTop += SPEEN_DISTANCE;
             if (slideTop >= frame.bottom) {
                 slideTop = frame.top;
             }
+
+
             Rect lineRect = new Rect();
             lineRect.left = frame.left;
             lineRect.right = frame.right;
             lineRect.top = slideTop;
             lineRect.bottom = slideTop + 18;
+
+            //用来绘制一个bitmap
             canvas.drawBitmap(((BitmapDrawable) (getResources()
                             .getDrawable(R.drawable.fle))).getBitmap(), null, lineRect,
                     paint);
 
+            //绘制一行文字
             paint.setColor(Color.WHITE);
             paint.setTextSize(TEXT_SIZE * density);
             paint.setAlpha(0x40);
